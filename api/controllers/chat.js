@@ -1,43 +1,43 @@
 module.exports = (io,app) => {
-      //  const express = require('express');
-      //  const app = express();
-        const path = require('path')
+    const User = require('../models/userModel')
 
+    console.log("in chats prro")
+      const path = require('path')
+    
         let nicknames = {};
 
-        async function chat(req, res) {
         
-          //  res.sendfile(__dirname + '/public/index.html');
-        
-            io.sockets.on('connection', function(socket) {
-                socket.on('send message', function(data) {
-                    io.sockets.emit('new message', {msg: data, nick: socket.nickname});
-                });
-                
-                socket.on('new user', function(data, callback) { /// here check it out for logs
-                    if (data in nicknames) {
-                        callback(false);
-                    } else {
-                        callback(true);
-                        socket.nickname = data;
-                        nicknames[socket.nickname] = 1;
-                        updateNickNames();
+        async function chat_login(req, res){
+            try {
+                let userMail = req.body.nickname
+                let user = await User.findOne({'email': userMail})
+                if(user.role === 'Cheff'){
+                    let userDealer = await User.find({'role': 'Dealer'}) // si regresa
+                    let dealersArray
+                    for (i in userDealer){
+                        dealersArray = userDealer[i].name
+                        console.log(i,':::  ',dealersArray)
                     }
-                });
-                
-                socket.on('disconnect', function(data) {
-                    if(!socket.nickname) return;
-                    delete nicknames[socket.nickname];
-                    updateNickNames();
-                });
-                
-                function updateNickNames() {
-                    io.sockets.emit('usernames', nicknames);
+                        
+                    res.render('onlineList', { dealers : userDealer }); /// da undefined 
+                    
+                }else{
+                    let userCheff = await User.find({'role': 'Cheff'})
+                    let cheffArray
+                    for (i in cheffArray){
+                        cheffArray = userCheff[i].name
+                        console.log(i,':::  ',cheffArray)
+                    }
+                    res.render('onlineList', { dealers : userCheff });
                 }
-                });
-            }
-            return {
-                chat
+            } catch (error) {
+                console.log(error)
+                res.sendFile(path.resolve('public/notFound.html'));
             }
 
-        }        
+        }
+        return{
+            chat_login
+        }
+
+        }///exports        

@@ -41,10 +41,14 @@ module.exports = (app, io) => { // declaracion para exportar el modulo
     auth_routes.post('/login', require_login ,authentication_controller.login)
 
 ///chat  route
-    api_routes.use('/chat', chat_routes)
+   api_routes.use('/chat', chat_routes)
    // chat_routes.get('/',require_authentication,chat_controller.chat)
-   chat_routes.get('/',chat_controller.chat)
-  
+   chat_routes.post('/',chat_controller.chat_login)
+   
+
    app.use ('/api', api_routes)    // Cuando se llega aqui se usa la ruta /API y la funcion apiroutes que es esta
+
+
+
 }// end module.exports
 
