@@ -45,7 +45,7 @@
                <form method="post" action="/api/chat">
                     <input id="nickname" name="nickname" class="form-control input-lg" type="text" placeholder="Enter your username">
                     <span class="input-group-btn">
-                        <button class="btn btn-lg btn-primary" type="submit" value="Submit" id="setNick">OK</button>
+                        <input id="clickMe"  type="button" value="Entrar" class="btn btn-lg btn-primary" type="submit" value="Submit" id="setNick" />
                     </span>
                 </form>
             </div>
@@ -53,5 +53,25 @@
             </div>
             
         </div>
+        <script src="socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+               $(document).ready(function() {
+                    var lolz = $('#nickname');
+                    var kk = $('#clickMe');
+                    kk.click(function() {
+                        var socket = io.connect();
+                        socket.emit('newUser', lolz.val(), function(data){
+                        console.log('new user sended')
+                    });
+                });
+              });
+
+        
+       //     var socket = io.connect();
+        //    socket.emit('newUser', document.getElementById("nickname"), function(data){
+        //       nickname = document.getElementById("nickname")
+        //    })
+            
+        </script>
     </body>
 </html>

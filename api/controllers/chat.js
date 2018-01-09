@@ -4,8 +4,30 @@ module.exports = (io,app) => {
     console.log("in chats prro")
       const path = require('path')
     
-        let nicknames = {};
+        let usernames = [];
 
+        io.on('connection',(socket)=>{
+            console.log('New Conecction, id: ',socket.id)
+        
+           socket.on('newUser',function(data, username, callback){
+            let user = {};
+            user.username = username
+            user.msg= ''
+            user.socketid= socket.id
+            usernames.push(user)
+            console.log("user::: \n",user,":::::: \n")
+            console.log("usernames::: \n",usernames,":::::: \n")
+            showUsers()      
+                
+
+            }) 
+        
+            function showUsers(){
+          
+                io.emit('usernames', usernames)
+            }
+        })
+      
         
         async function chat_login(req, res){
             try {
@@ -40,4 +62,4 @@ module.exports = (io,app) => {
             chat_login
         }
 
-        }///exports        
+  }///exports        

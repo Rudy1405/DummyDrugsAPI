@@ -59,14 +59,14 @@
                 </div>
                 
             </div>
-            <script src="socket.io/socket.io.js"></script>
-            <script src="../api/controllers/chat.js"></script>
-            
+         
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
             <script>
-                jQuery(function($) {
-                   var socket = io.connect();
-                   var $users = $('#users');
 
+                var socket = io.connect();
+                socket.emit('newUser', document.getElementById("nickname"), function(data){
+                    nickname = document.getElementById("nickname")
+                 })
                    
                    socket.on('usernames', function(data) {
                         var html = '';
@@ -76,7 +76,7 @@
                         $users.html(html);
                     });
                    
-                });
+        
                 
             </script>
         </body>
